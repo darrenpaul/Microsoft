@@ -1,3 +1,4 @@
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy AllSigned
 
 #PATHS
 $local_resources = 'C:\deploy_temp'
@@ -33,6 +34,13 @@ $houdini15_5_717 = "Houdini 15.5.717", "$local_resources\houdini-15.5.717-win64-
 #Quicktime
 $quicktime = "quicktime_installer.bat", "$local_resources\QuickTime\quicktime_installer.bat", "$server_resources_01\QuickTime*"
 
+#redistributables
+$vcredist_2013_32 = "vcredist c++ 2013 32bit", "$local_resources\vcredist_x86.exe", "$server_resources_01\redistributables\vc++ 2013\vcredist_x86.exe"
+$vcredist_2013_64 = "vcredist c++ 2013 64bit", "$local_resources\vcredist_x64.exe", "$server_resources_01\redistributables\vc++ 2013\vcredist_x64.exe"
+
+$vcredist_2015_32 = "vcredist c++ 2015 32bit", "$local_resources\vc_redist.x86.exe", "$server_resources_01\redistributables\vc++ 2015\vc_redist.x86.exe"
+$vcredist_2015_64 = "vcredist c++ 2015 64bit", "$local_resources\vc_redist.x64.exe", "$server_resources_01\redistributables\vc++ 2015\vc_redist.x64.exe"
+
 $files_to_copy = @(
     $firefox,
     $thunderbird,
@@ -52,15 +60,24 @@ $files_to_copy = @(
     $maya2015Update6,
     $houdini15_5_523,
     $houdini15_5_717,
-    $quicktime
+    $quicktime,
+    $vcredist_2013_32,
+    $vcredist_2015_32,
+    $vcredist_2013_64,
+    $vcredist_2015_64
 )
 
 $exe_files_simple = @(
-    $firefox,
-    $thunderbird,
-    $vlc,
-    $pycharm,
-    $shotgun
+    #$firefox,
+    #$thunderbird,
+    #$vlc,
+    #$pycharm,
+    #$shotgun,
+    $vcredist_2013_32,
+    $vcredist_2015_32,
+    $vcredist_2013_64,
+    $vcredist_2015_64
+
 )
 
 $maya_service_packs = @(
@@ -79,13 +96,13 @@ if(!(Test-Path $local_resources)){
 foreach($item in $files_to_copy){
     $cur_time = Get-Date
     Write-Host $cur_time.ToShortTimeString() - 'Copying'$item[0]
-    #Copy-Item $item[2] $local_resources -Recurse
+    Copy-Item $item[2] $local_resources -Recurse
 }
 
 #pycharm
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$pycharm[0]
-Start-Process -FilePath $pycharm[1] -ArgumentList /S -wait
+#Start-Process -FilePath $pycharm[1] -ArgumentList /S -wait
 
 #maya
 $cur_time = Get-Date
@@ -95,7 +112,7 @@ Write-Host $cur_time.ToShortTimeString() - 'Installing'$maya2015[0]
 foreach($item in $exe_files_simple){
     $cur_time = Get-Date
     Write-Host $cur_time.ToShortTimeString() - 'Installing'$item[0]
-    #Start-Process -FilePath $item[1] -ArgumentList /S -Wait
+    Start-Process -FilePath $item[1] -ArgumentList /S -Wait
 }
 
 #chrome
@@ -140,8 +157,8 @@ Write-Host $cur_time.ToShortTimeString() - 'Installing'$github[0]
 foreach($item in $maya_service_packs){
     $cur_time = Get-Date
     Write-Host $cur_time.ToShortTimeString() - 'Installing'$item[0]
-    Start-Process -FilePath msiexec -ArgumentList $item[1] -Wait
+    #Start-Process -FilePath msiexec -ArgumentList $item[1] -Wait
 }
 
-Remove-Item $local_resources -recurse
+#Remove-Item $local_resources -recurse
 Write-Host $cur_time.ToShortTimeString() - 'Deployment Completed'
