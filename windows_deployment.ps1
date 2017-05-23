@@ -68,11 +68,11 @@ $files_to_copy = @(
 )
 
 $exe_files_simple = @(
-    #$firefox,
-    #$thunderbird,
-    #$vlc,
-    #$pycharm,
-    #$shotgun,
+    $firefox,
+    $thunderbird,
+    $vlc,
+    $pycharm,
+    $shotgun,
     $vcredist_2013_32,
     $vcredist_2015_32,
     $vcredist_2013_64,
@@ -102,12 +102,12 @@ foreach($item in $files_to_copy){
 #pycharm
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$pycharm[0]
-#Start-Process -FilePath $pycharm[1] -ArgumentList /S -wait
+Start-Process -FilePath $pycharm[1] -ArgumentList /S -wait
 
 #maya
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$maya2015[0]
-#Start-Process -FilePath $maya2015[1] -ArgumentList /S -wait
+Start-Process -FilePath $maya2015[1] -ArgumentList /S -wait
 
 foreach($item in $exe_files_simple){
     $cur_time = Get-Date
@@ -118,47 +118,47 @@ foreach($item in $exe_files_simple){
 #chrome
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$chrome[0]
-#Start-Process -FilePath msiexec -ArgumentList $chrome[1] -Wait
+Start-Process -FilePath msiexec -ArgumentList $chrome[1] -Wait
 
 #python
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$python[0]
-#Start-Process -FilePath msiexec -ArgumentList $python[1] -Wait
+Start-Process -FilePath msiexec -ArgumentList $python[1] -Wait
 Write-Host "Setting up python environment"
-#[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "User")
-#[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
+[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "User")
+[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
 
 #pycharm
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$pycharm[0]
-#Start-Process -FilePath $pycharm[1] /I -Wait
+Start-Process -FilePath $pycharm[1] /I -Wait
 
 #Quicktime
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$quicktime[0]
-#Start-Process $quicktime[1] -Wait
+Start-Process $quicktime[1] -Wait
 
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$houdini15_5_523[0]
-#Start-Process -FilePath $houdini15_5_523[1] -ArgumentList "/S /AcceptEula=yes" -Wait
+Start-Process -FilePath $houdini15_5_523[1] -ArgumentList "/S /AcceptEula=yes" -Wait
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$houdini15_5_717[0]
-#Start-Process -FilePath $houdini15_5_717[1] -ArgumentList "/S /AcceptEula=yes" -Wait
+Start-Process -FilePath $houdini15_5_717[1] -ArgumentList "/S /AcceptEula=yes" -Wait
 
 #slack
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$slack[0]
-#Start-Process -FilePath $slack[1] -ArgumentList /S
+Start-Process -FilePath $slack[1] -ArgumentList /S
 
 #github
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$github[0]
-#Start-Process -FilePath $github[1] -ArgumentList /S
+Start-Process -FilePath $github[1] -ArgumentList /S
 
 foreach($item in $maya_service_packs){
     $cur_time = Get-Date
     Write-Host $cur_time.ToShortTimeString() - 'Installing'$item[0]
-    #Start-Process -FilePath msiexec -ArgumentList $item[1] -Wait
+    Start-Process -FilePath msiexec -ArgumentList $item[1] -Wait
 }
 
-#Remove-Item $local_resources -recurse
+Remove-Item $local_resources -recurse
 Write-Host $cur_time.ToShortTimeString() - 'Deployment Completed'
