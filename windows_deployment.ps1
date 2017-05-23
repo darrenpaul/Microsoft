@@ -71,13 +71,11 @@ $exe_files_simple = @(
     $firefox,
     $thunderbird,
     $vlc,
-    $pycharm,
     $shotgun,
     $vcredist_2013_32,
     $vcredist_2015_32,
     $vcredist_2013_64,
     $vcredist_2015_64
-
 )
 
 $maya_service_packs = @(
@@ -99,15 +97,28 @@ foreach($item in $files_to_copy){
     Copy-Item $item[2] $local_resources -Recurse
 }
 
+#slack
+$cur_time = Get-Date
+Write-Host $cur_time.ToShortTimeString() - 'Installing'$slack[0]
+Write-Host "Close slack after installation"
+Start-Process -FilePath $slack[1] -Wait
+
+#github
+$cur_time = Get-Date
+Write-Host $cur_time.ToShortTimeString() - 'Installing'$github[0]
+Write-Host "Close github after installation"
+Start-Process -FilePath $github[1] -Wait
+
 #pycharm
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$pycharm[0]
-Start-Process -FilePath $pycharm[1] -ArgumentList /S -wait
+Start-Process -FilePath $pycharm[1] -wait
 
 #maya
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$maya2015[0]
-Start-Process -FilePath $maya2015[1] -ArgumentList /S -wait
+Write-Host "Close Maya and Autodesk application manager  after installation"
+Start-Process -FilePath $maya2015[1] -wait
 
 foreach($item in $exe_files_simple){
     $cur_time = Get-Date
@@ -128,11 +139,6 @@ Write-Host "Setting up python environment"
 [Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "User")
 [Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
 
-#pycharm
-$cur_time = Get-Date
-Write-Host $cur_time.ToShortTimeString() - 'Installing'$pycharm[0]
-Start-Process -FilePath $pycharm[1] /I -Wait
-
 #Quicktime
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$quicktime[0]
@@ -141,18 +147,9 @@ Start-Process $quicktime[1] -Wait
 $cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$houdini15_5_523[0]
 Start-Process -FilePath $houdini15_5_523[1] -ArgumentList "/S /AcceptEula=yes" -Wait
+$cur_time = Get-Date
 Write-Host $cur_time.ToShortTimeString() - 'Installing'$houdini15_5_717[0]
 Start-Process -FilePath $houdini15_5_717[1] -ArgumentList "/S /AcceptEula=yes" -Wait
-
-#slack
-$cur_time = Get-Date
-Write-Host $cur_time.ToShortTimeString() - 'Installing'$slack[0]
-Start-Process -FilePath $slack[1] -ArgumentList /S
-
-#github
-$cur_time = Get-Date
-Write-Host $cur_time.ToShortTimeString() - 'Installing'$github[0]
-Start-Process -FilePath $github[1] -ArgumentList /S
 
 foreach($item in $maya_service_packs){
     $cur_time = Get-Date
