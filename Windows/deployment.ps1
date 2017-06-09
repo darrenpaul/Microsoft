@@ -5,7 +5,7 @@ $local_resources = 'C:\deploy_temp'
 $server_resources_01 = '\\fileserver01\resources\it\software\Windows_Software\workstation'
 $path_to_software = "\\fileserver01\resources\it\software"
 
-$windows_setup = 'Windows Setup', "$local_resources\get_last_win_pc.py", "$server_resources_01\get_last_win_pc.py", 1
+$windows_setup = 'Windows Setup', "$local_resources\get_last_win_pc.py", "$server_resources_01\get_last_win_pc.py", 0
 $firefox = 'Mozilla Thunderbird', "$local_resources\FirefoxSetup.exe", "$server_resources_01\FirefoxSetup.exe", 0
 $thunderbird = 'Mozilla Firefox', "$local_resources\ThunderbirdSetup.exe", "$server_resources_01\ThunderbirdSetup.exe", 0
 $vlc = 'VLC', "$local_resources\vlcSetup.exe", "$server_resources_01\vlcSetup.exe", 0
@@ -43,6 +43,11 @@ $houdini16_0_600 = "Houdini 16.0.600", "$local_resources\houdini-16.0.600-win64-
 $nuke_path = "foundry\nuke"
 $nuke10 = "Nuke 10", "$local_resources\Nuke10.5v3-win-x86-release-64.exe", "$path_to_software\$nuke_path\Nuke10.5v3-win-x86-release-64.exe", 0
 
+#Mari
+#10
+$mari_path = "foundry\mari"
+$mari3 = "Mari 3.3", "$local_resources\Mari3.3v1-win-x86-release-64.exe", "$path_to_software\$mari_path\Mari3.3v1-win-x86-release-64.exe", 1
+
 #Quicktime
 $quicktime = "quicktime_installer.bat", "$local_resources\QuickTime\quicktime_installer.bat", "$server_resources_01\QuickTime*", 0
 
@@ -75,6 +80,7 @@ $files_to_copy = @(
     $houdini15_5_717,
 	$houdini16_0_600,
 	$nuke10,
+    $mari3,
     $quicktime,
     $vcredist_2013_32,
     $vcredist_2015_32,
@@ -218,6 +224,13 @@ if($nuke10[3] -eq 1){
 	Start-Process -FilePath $nuke10[1] -ArgumentList /silent -Wait
 }
 
+#Mari
+if($Mari3[3] -eq 1){
+	$cur_time = Get-Date
+	Write-Host $cur_time.ToShortTimeString() - 'Installing'$Mari3[0]
+	Start-Process -FilePath $Mari3[1] -ArgumentList /silent -Wait
+}
+
 #Maya 2015 updates
 foreach($item in $maya_service_packs){
 	if($item[3] -eq 1){
@@ -242,5 +255,4 @@ if($windows_setup[3] -eq 1){
 }
 
 Remove-Item $local_resources -recurse
-#Write-Host $cur_time.ToShortTimeString() - 'Deployment Completed'
-Restart-Computer -Force
+#Restart-Computer -Force
