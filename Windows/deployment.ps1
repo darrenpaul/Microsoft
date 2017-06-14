@@ -46,7 +46,11 @@ $nuke10 = "Nuke 10", "$local_resources\Nuke10.5v3-win-x86-release-64.exe", "$pat
 #Mari
 #10
 $mari_path = "foundry\mari"
-$mari3 = "Mari 3.3", "$local_resources\Mari3.3v1-win-x86-release-64.exe", "$path_to_software\$mari_path\Mari3.3v1-win-x86-release-64.exe", 1
+$mari3 = "Mari 3.3", "$local_resources\Mari3.3v1-win-x86-release-64.exe", "$path_to_software\$mari_path\Mari3.3v1-win-x86-release-64.exe", 0
+
+#zbrush
+$zbrush_path = "\Zbrush"
+$zbrush = "Zbrush 4R8", "$local_resources\ZBrush_4R8_Installer_WIN.exe", "$path_to_software\$zbrush_path\ZBrush_4R8_Installer_WIN.exe", 1
 
 #Quicktime
 $quicktime = "quicktime_installer.bat", "$local_resources\QuickTime\quicktime_installer.bat", "$server_resources_01\QuickTime*", 0
@@ -81,6 +85,7 @@ $files_to_copy = @(
 	$houdini16_0_600,
 	$nuke10,
     $mari3,
+	$zbrush,
     $quicktime,
     $vcredist_2013_32,
     $vcredist_2015_32,
@@ -120,7 +125,7 @@ foreach($item in $files_to_copy){
 	if($item[3] -eq 1){
 		$cur_time = Get-Date
 		Write-Host $cur_time.ToShortTimeString() - 'Copying'$item[0]
-		Copy-Item $item[2] $local_resources -Recurse
+		#Copy-Item $item[2] $local_resources -Recurse
 	}
 }
 
@@ -231,6 +236,13 @@ if($Mari3[3] -eq 1){
 	Start-Process -FilePath $Mari3[1] -ArgumentList /silent -Wait
 }
 
+#Zbrush
+if($zbrush[3] -eq 1){
+	$cur_time = Get-Date
+	Write-Host $cur_time.ToShortTimeString() - 'Installing'$zbrush[0]
+	Start-Process $zbrush[1] '--mode unattended' -Wait
+}
+
 #Maya 2015 updates
 foreach($item in $maya_service_packs){
 	if($item[3] -eq 1){
@@ -254,5 +266,5 @@ if($windows_setup[3] -eq 1){
 	Rename-Computer $get_hostname
 }
 
-Remove-Item $local_resources -recurse
+#Remove-Item $local_resources -recurse
 #Restart-Computer -Force
