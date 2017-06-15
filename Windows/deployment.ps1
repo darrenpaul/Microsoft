@@ -5,9 +5,14 @@ $local_resources = 'C:\deploy_temp'
 $server_resources_01 = '\\fileserver01\resources\it\software\Windows_Software\workstation'
 $path_to_software = "\\fileserver01\resources\it\software"
 
-$windows_setup = 'Windows Setup', "$local_resources\get_last_win_pc.py", "$server_resources_01\get_last_win_pc.py", 0
-$firefox = 'Mozilla Thunderbird', "$local_resources\FirefoxSetup.exe", "$server_resources_01\FirefoxSetup.exe", 0
-$thunderbird = 'Mozilla Firefox', "$local_resources\ThunderbirdSetup.exe", "$server_resources_01\ThunderbirdSetup.exe", 0
+$windows_setup = 'Windows Setup', "$local_resources\pip_installs.txt", "$server_resources_01\pip_installs.txt", 0
+$pip_installs = 'PIP Installs', "$local_resources\pip_installs.txt", "$server_resources_01\pip_installs.txt", 0
+$pip = 'Python PIP', "$local_resources\get-pip.py", "$server_resources_01\get-pip.py", 0
+$get_last_pc = 'Windows Setup', "$local_resources\get_last_win_pc.py", "$server_resources_01\get_last_win_pc.py", 0
+$remote_assist = 'Remote Desktop Assist', "C:\deploy_temp\WindowsTH-RSAT_WS2016-x64.msu /quiet", "$server_resources_01\WindowsTH-RSAT_WS2016-x64.msu", 0
+$nvidia = 'Nvidia', "$local_resources\382.53-desktop-win10-64bit-international-whql.exe", "$server_resources_01\382.53-desktop-win10-64bit-international-whql.exe", 0
+$firefox = 'Mozilla Firefox', "$local_resources\FirefoxSetup.exe", "$server_resources_01\FirefoxSetup.exe", 0
+$thunderbird = 'Mozilla Thunderbird', "$local_resources\ThunderbirdSetup.exe", "$server_resources_01\ThunderbirdSetup.exe", 0
 $vlc = 'VLC', "$local_resources\vlcSetup.exe", "$server_resources_01\vlcSetup.exe", 0
 $shotgun = 'Shotgun Desktop', "$local_resources\ShotgunInstaller_Current.exe", "$server_resources_01\ShotgunInstaller_Current.exe", 0
 $pycharm = 'PyCharm', "$local_resources\pycharm-community-2017.1.2.exe", "$server_resources_01\pycharm-community-2017.1.2.exe", 0
@@ -29,7 +34,9 @@ $maya2015Update6 = "Maya 2015 Update 6", "/qb! /update C:\deploy_temp\Autodesk_M
 #2017
 $maya_path_2017 = "Autodesk\maya\Maya_2017\Windows"
 $maya2017 = "Maya 2017", "$local_resources\Autodesk_Maya_2017_EN_JP_ZH_Win_64bit_dlm.sfx.exe", "$path_to_software\$maya_path_2017\Autodesk_Maya_2017_EN_JP_ZH_Win_64bit_dlm.sfx.exe", 0
-$maya2017Update3 = "Maya 2017 Update 3", "C:\deploy_temp\Autodesk_Maya_2017_Update3_x64.exe", "$path_to_software\$maya_path_2017\Autodesk_Maya_2017_Update3_x64.exe", 0
+$maya2017Update1 = "Maya 2017 Update 1", "C:\deploy_temp\Autodesk_Maya_2017_Update1_x64.exe", "$path_to_software\$maya_path_2017\Autodesk_Maya_2017_Update1_x64.exe", 1
+$maya2017Update2 = "Maya 2017 Update 2", "C:\deploy_temp\Autodesk_Maya_2017_Update2_x64.exe", "$path_to_software\$maya_path_2017\Autodesk_Maya_2017_Update2_x64.exe", 1
+$maya2017Update3 = "Maya 2017 Update 3", "C:\deploy_temp\Autodesk_Maya_2017_Update3_x64.exe", "$path_to_software\$maya_path_2017\Autodesk_Maya_2017_Update3_x64.exe", 1
 
 #Houdini
 $houndini_path_15 = "\\fileserver01\resources\it\software\sidefx\Windows\Houdini15"
@@ -50,7 +57,7 @@ $mari3 = "Mari 3.3", "$local_resources\Mari3.3v1-win-x86-release-64.exe", "$path
 
 #zbrush
 $zbrush_path = "\Zbrush"
-$zbrush = "Zbrush 4R8", "$local_resources\ZBrush_4R8_Installer_WIN.exe", "$path_to_software\$zbrush_path\ZBrush_4R8_Installer_WIN.exe", 1
+$zbrush = "Zbrush 4R8", "$local_resources\ZBrush_4R8_Installer_WIN.exe", "$path_to_software\$zbrush_path\ZBrush_4R8_Installer_WIN.exe", 0
 
 #Quicktime
 $quicktime = "quicktime_installer.bat", "$local_resources\QuickTime\quicktime_installer.bat", "$server_resources_01\QuickTime*", 0
@@ -62,8 +69,12 @@ $vcredist_2015_32 = "vcredist c++ 2015 32bit", "$local_resources\vc_redist.x86.e
 $vcredist_2015_64 = "vcredist c++ 2015 64bit", "$local_resources\vc_redist.x64.exe", "$server_resources_01\redistributables\vc++ 2015\vc_redist.x64.exe", 0
 
 $files_to_copy = @(
-    $windows_setup,
+    $get_last_pc,
+	$pip,
+	$pip_installs,
     $firefox,
+	$nvidia,
+	$remote_assist,
     $thunderbird,
     $vlc,
     $shotgun,
@@ -73,12 +84,15 @@ $files_to_copy = @(
     $github,
     $chrome,
     $maya2015,
+	$maya2017,
     $maya2015Update1,
     $maya2015Update2,
     $maya2015Update3,
     $maya2015Update4,
     $maya2015Update5,
     $maya2015Update6,
+	$maya2017Update1,
+	$maya2017Update2,
     $maya2017Update3,
     $houdini15_5_523,
     $houdini15_5_717,
@@ -113,20 +127,29 @@ $maya_service_packs = @(
     $maya2015Update6
 )
 
-$maya_2017_updates = @(
-    $maya2017Update3
-)
 
+#create new temp directory
 if(!(Test-Path $local_resources)){
     New-Item -ItemType directory -Path $local_resources
 }
 
+#copy all the resources from the server into the temo directory
 foreach($item in $files_to_copy){
 	if($item[3] -eq 1){
 		$cur_time = Get-Date
 		Write-Host $cur_time.ToShortTimeString() - 'Copying'$item[0]
-		#Copy-Item $item[2] $local_resources -Recurse
+		Copy-Item $item[2] $local_resources -Recurse
 	}
+}
+
+#python
+if($python[3] -eq 1){
+	$cur_time = Get-Date
+	Write-Host $cur_time.ToShortTimeString() - 'Installing'$python[0]
+	Start-Process -FilePath msiexec -ArgumentList $python[1] -Wait
+	Write-Host "Setting up python environment"
+	[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "User")
+	[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
 }
 
 #slack
@@ -163,7 +186,7 @@ if($maya2015[3] -eq 1){
 #2017
 if($maya2017[3] -eq 1){
 	$cur_time = Get-Date
-	Write-Host $cur_time.ToShortTimeString() - 'Installing'$maya2015[0]
+	Write-Host $cur_time.ToShortTimeString() - 'Installing'$maya2017[0]
 	Write-Host "Close Maya and Autodesk application manager  after installation"
 	Start-Process -FilePath $maya2017[1] -wait
 }
@@ -176,6 +199,22 @@ if($chrome[3] -eq 1){
 
 }
 
+#Remote Desktop Assist
+if($remote_assist[3] -eq 1){
+	$cur_time = Get-Date
+	Write-Host $cur_time.ToShortTimeString() - 'Installing'$remote_assist[0]
+	Start-Process -FilePath wusa.exe -ArgumentList $remote_assist[1] -Wait
+}
+
+#Nvidia
+if($nvidia[3] -eq 1){
+	$cur_time = Get-Date
+	Write-Host $cur_time.ToShortTimeString() - 'Installing'$nvidia[0]
+	Start-Process -FilePath $nvidia[1] -ArgumentList "/n /s /noeula /nofinish" -Wait
+
+}
+
+
 #simple exes
 foreach($item in $exe_files_simple){
 	if($item[3] -eq 1){
@@ -185,15 +224,6 @@ foreach($item in $exe_files_simple){
 	}
 }
 
-#python
-if($python[3] -eq 1){
-	$cur_time = Get-Date
-	Write-Host $cur_time.ToShortTimeString() - 'Installing'$python[0]
-	Start-Process -FilePath msiexec -ArgumentList $python[1] -Wait
-	Write-Host "Setting up python environment"
-	[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "User")
-	[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
-}
 
 if($quicktime[3] -eq 1){
 	#Quicktime
@@ -255,10 +285,10 @@ foreach($item in $maya_service_packs){
 if($maya2017Update3[3] -eq 1){
 	$cur_time = Get-Date
 	Write-Host $cur_time.ToShortTimeString() - 'Installing'$maya2017Update3[0]
-	Start-Process -FilePath $maya2017Update3[1] -ArgumentList /S -Wait
+	Start-Process -FilePath $maya2017Update3[1] -ArgumentList /SP -Wait
 }
 
-
+#rename windows machine
 if($windows_setup[3] -eq 1){
 	python "$local_resources\get_last_win_pc.py"
 	$get_hostname = Get-Content "$local_resources\hostname_log.txt"

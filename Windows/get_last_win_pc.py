@@ -41,15 +41,12 @@ def Create_New_Information():
     new_pc_name = "sun-win-" + str(last_pc_index)
     get_date = time.strftime("%Y-%m-%d %H:%M")
 
-    try:
-        new_pc_ip = socket.gethostbyname(new_pc_name)
-    except:
-        new_pc_ip = ""
+    new_pc_ip = socket.gethostbyname(socket.gethostname())
 
     sheet.update_cell(row_index, 1, new_pc_name)
     sheet.update_cell(row_index, 2, new_pc_ip)
     sheet.update_cell(row_index, 3, '10.0.0.1')
-    sheet.update_cell(row_index, 4, get_new_deploy)
+    sheet.update_cell(row_index, 4, get_date)
     sheet.update_cell(row_index, 5, get_date)
 
     file = open("C:\deploy_temp\hostname_log.txt","w") 
@@ -68,7 +65,7 @@ for pc in pc_names:
         break
 
 curHostname = socket.gethostname()
-pc_ip = socket.gethostbyname(curHostname)
+pc_ip = socket.gethostbyname(socket.gethostname())
 ip_addresses = sheet.col_values(2)
 row_index = 1
 for ip in ip_addresses:
@@ -79,11 +76,6 @@ for ip in ip_addresses:
         Create_New_Information()
         break;
     row_index += 1
-
-
-
-
-
 
 
 
