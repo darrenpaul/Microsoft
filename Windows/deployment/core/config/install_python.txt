@@ -1,0 +1,19 @@
+url
+https://www.python.org/ftp/python/2.7.14/python-2.7.14.msi
+target_path
+C:\deployment
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+$url = "https://www.python.org/ftp/python/2.7.14/python-2.7.14.msi"
+$output = "C:\deployment\python-2.7.14.msi"
+$start_time = Get-Date
+
+$wc = New-Object System.Net.WebClient
+$wc.DownloadFile($url, $output)
+#OR
+(New-Object System.Net.WebClient).DownloadFile($url, $output)
+
+Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)"
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
