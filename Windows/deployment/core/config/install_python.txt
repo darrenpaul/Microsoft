@@ -1,7 +1,7 @@
-url
-https://www.python.org/ftp/python/2.7.14/python-2.7.14.msi
-target_path
-C:\deployment
+install_directory = C:\Python27\python.exe
+
+download_url = https://www.python.org/ftp/python/2.7.14/python-2.7.14.msi
+downloaded_path = C:\deployment\python-2.7.14.msi
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
