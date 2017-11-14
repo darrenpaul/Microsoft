@@ -1,0 +1,8 @@
+paths:
+  source:
+    url:
+    local: "C:/dev/Microsoft/Windows/deployment/repo/browsers/GoogleChrome64.msi"
+  output:
+command:
+  install: "/i"
+  silent: "qb!"
