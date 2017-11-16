@@ -1,0 +1,15 @@
+{
+  "command":
+  {
+    "install": "/i",
+    "silent": "/qb!"
+  },
+ "paths":
+ {
+   "source":
+   {
+     "local": "C:\\dev\\Microsoft\\Windows\\deployment\\repo\\browsers\\googlechrome64.msi",
+     "url": ""
+   }
+ }
+}
