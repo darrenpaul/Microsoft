@@ -1,0 +1,15 @@
+{
+  "type": "exe",
+  "command":
+  {
+    "silent": "/S"
+  },
+ "paths":
+ {
+   "source":
+   {
+     "local": "C:\\deployment\\firefox.exe",
+     "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-ZA"
+   }
+ }
+}

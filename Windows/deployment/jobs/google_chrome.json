@@ -1,4 +1,5 @@
 {
+  "type": "msiexec",
   "command":
   {
     "install": "/i",
