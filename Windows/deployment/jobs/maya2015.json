@@ -1,0 +1,18 @@
+{
+  "zipped": true,
+  "type": "custom",
+  "command":
+  {
+  },
+ "paths":
+ {
+   "source":
+   {
+      "local": "C:\\deployment\\maya2015",
+      "zipped": "C:\\deployment\\maya2015.zip",
+      "executable": "C:\\deployment\\maya2015\\maya_installer.ps1",
+      "server": "\\\\fileserver01\\resources\\it\\software\\Autodesk\\2015\\windows\\maya2015.zip",
+      "url": ""
+   }
+ }
+}

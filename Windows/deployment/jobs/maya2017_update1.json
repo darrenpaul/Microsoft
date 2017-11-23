@@ -1,0 +1,16 @@
+{
+  "type": "exe",
+  "command":
+  {
+    "silent": "/SP"
+  },
+ "paths":
+ {
+   "source":
+   {
+     "local": "C:\\deployment\\autodesk_maya_2017_update1_win.exe",
+     "server": "\\\\fileserver01\\resources\\it\\software\\Autodesk\\2017\\windows\\updates\\autodesk_maya_2017_update1_win.exe",
+     "url": ""
+   }
+ }
+}

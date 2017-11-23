@@ -1,0 +1,17 @@
+{
+  "type": "msiexec",
+  "command":
+  {
+    "install": "/update",
+    "silent": "/qb!"
+  },
+ "paths":
+ {
+   "source":
+   {
+      "local": "C:\\deployment\\autodesk_maya_2015_sp4_win.msp",
+      "server": "\\\\fileserver01\\resources\\it\\software\\Autodesk\\2015\\windows\\updates\\autodesk_maya_2015_sp4_win.msp",
+      "url": ""
+   }
+ }
+}

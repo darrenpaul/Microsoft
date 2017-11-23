@@ -1,11 +1,14 @@
 import sys
 import logging
 import json
+import zipfile
 import re
 import argparse
 import os
+import shutil
 import platform
-from subprocess import Popen, PIPE, call
+import subprocess as sp
+import getpass
 from pprint import pprint
 
 
@@ -57,20 +60,48 @@ def _parse_data(job=basestring):
             print "DOWNLOADING", job
             urllib.urlretrieve(source, data["paths"]["source"]["local"])
     if data["paths"]["source"]["local"]:
+        if "server" in data["paths"]["source"]:
+            server_source = str(data["paths"]["source"]["server"])
         source = data["paths"]["source"]["local"]
+        if "zipped" in data:
+            if data["zipped"]:
+                source = data["paths"]["source"]["zipped"]
+                if os.path.exists(source) is False:
+                    shutil.copyfile(server_source, source)
+                if os.path.exists(data["paths"]["source"]["local"]) is False:
+                    _unzip(source=data["paths"]["source"]["zipped"], target=data["paths"]["source"]["local"])
+        else:
+            if os.path.exists(source) is False:
+                shutil.copyfile(server_source, source)
+
+    if "executable" in data["paths"]["source"]:
+        source = data["paths"]["source"]["executable"]
 
     command = _get_commands(data=data["command"])
     exec_type = data["type"]
 
-    print "-" * 80
+    print "\n"
+    print "PREPARING DATA"
     print "-" * 80
     print "SOURCE", source
     print "COMMAND", command
     print "-" * 80
-    print "-" * 80
+    print "---DATA READY---"
 
     _run_command(path=source, command=command, exec_type=exec_type)
 
+
+def _unzip(source=basestring, target=basestring):
+    print "\n"
+    print "UNZIPPING FILE"
+    print "-" * 80
+    print "SOURCE", source
+    print "TARGET", target
+    print "-" * 80
+    zip = zipfile.ZipFile(source, 'r')
+    zip.extractall(target)
+    zip.close()
+    print "FINISHED UNZIPPING FILE"
 
 def _get_commands(data=None):
     command = ""
@@ -84,20 +115,24 @@ def _get_commands(data=None):
 def _run_command(path=basestring, command=basestring, exec_type=basestring):
     powershell = "powershell.exe"
     if exec_type == "msiexec":
-        exec_command = "{} Start-Process -FilePath msiexec -ArgumentList '{} {}' -Wait".format(powershell, path, command)
+        exec_command = "{} Start-Process -FilePath msiexec -ArgumentList '{} {}' -Wait".format(powershell, command, path)
     elif exec_type == "exe":
         exec_command = "{} Start-Process -FilePath {} -ArgumentList '{}' -Wait".format(powershell, path, command)
+    elif exec_type == "custom":
+        exec_command = "powershell {} {}".format(path, command)
     else:
         return
 
-    print "-" * 80
+    print "\n"
+    print "STARTING INSTALLATION"
     print "-" * 80
     print "EXECUTION TYPE", exec_type
     print "EXECUTION COMMAND", exec_command
     print "-" * 80
-    print "-" * 80
 
-    Popen(exec_command, shell=True)
+    sp.call(['runas', '/savedcred', '/user:darrenpaul', exec_command], shell=True)
+
+    print "---FINISHED INSTALLING---"
 
 if __name__ == '__main__':
     start_parser()

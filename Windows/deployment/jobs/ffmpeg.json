@@ -1,0 +1,15 @@
+{
+  "type": "library",
+  "command":
+  {
+  },
+ "paths":
+ {
+   "source":
+   {
+     "local": "\\fileserver01\\resources\\it\\software\\ffmpeg\\windows\\ffmpeg",
+     "url":
+   }
+   "output": "C:\\ffmpeg"
+ }
+}
