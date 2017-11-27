@@ -51,44 +51,50 @@ def _get_jobs_from_task(task=basestring):
 
 def _parse_data(job=basestring):
     data = json.load(open("C:/dev/Microsoft/Windows/deployment/jobs/{}.json".format(job)))
-
     source = None
-    if data["paths"]["source"]["local"] is not True:
-        if data["paths"]["source"]["url"]:
-            source = data["paths"]["source"]["url"]
-            import urllib
-            print "DOWNLOADING", job
-            urllib.urlretrieve(source, data["paths"]["source"]["local"])
-    if data["paths"]["source"]["local"]:
-        if "server" in data["paths"]["source"]:
-            server_source = str(data["paths"]["source"]["server"])
-        source = data["paths"]["source"]["local"]
-        if "zipped" in data:
-            if data["zipped"]:
-                source = data["paths"]["source"]["zipped"]
+
+    if data["type"] == "command":
+        for path in data["paths"]["source"]:
+            for key, val in  data["command"].iteritems():
+                command = val
+                _run_command(path=path, command=command, exec_type=data["type"])
+    else:
+        if data["paths"]["source"]["local"] is not True:
+            if data["paths"]["source"]["url"]:
+                source = data["paths"]["source"]["url"]
+                import urllib
+                print "DOWNLOADING", job
+                urllib.urlretrieve(source, data["paths"]["source"]["local"])
+        if data["paths"]["source"]["local"]:
+            if "server" in data["paths"]["source"]:
+                server_source = str(data["paths"]["source"]["server"])
+            source = data["paths"]["source"]["local"]
+            if "zipped" in data and data["zipped"]:
+                if data["zipped"]:
+                    source = data["paths"]["source"]["zipped"]
+                    if os.path.exists(source) is False:
+                        shutil.copyfile(server_source, source)
+                    if os.path.exists(data["paths"]["source"]["local"]) is False:
+                        _unzip(source=data["paths"]["source"]["zipped"], target=data["paths"]["source"]["local"])
+            else:
                 if os.path.exists(source) is False:
                     shutil.copyfile(server_source, source)
-                if os.path.exists(data["paths"]["source"]["local"]) is False:
-                    _unzip(source=data["paths"]["source"]["zipped"], target=data["paths"]["source"]["local"])
-        else:
-            if os.path.exists(source) is False:
-                shutil.copyfile(server_source, source)
 
-    if "executable" in data["paths"]["source"]:
-        source = data["paths"]["source"]["executable"]
+        if "executable" in data["paths"]["source"]:
+            source = data["paths"]["source"]["executable"]
 
-    command = _get_commands(data=data["command"])
-    exec_type = data["type"]
+        command = _get_commands(data=data["command"])
+        exec_type = data["type"]
 
-    print "\n"
-    print "PREPARING DATA"
-    print "-" * 80
-    print "SOURCE", source
-    print "COMMAND", command
-    print "-" * 80
-    print "---DATA READY---"
+        print "\n"
+        print "PREPARING DATA"
+        print "-" * 80
+        print "SOURCE", source
+        print "COMMAND", command
+        print "-" * 80
+        print "---DATA READY---"
 
-    _run_command(path=source, command=command, exec_type=exec_type)
+        _run_command(path=source, command=command, exec_type=exec_type)
 
 
 def _unzip(source=basestring, target=basestring):
@@ -120,6 +126,10 @@ def _run_command(path=basestring, command=basestring, exec_type=basestring):
         exec_command = "{} Start-Process -FilePath {} -ArgumentList '{}' -Wait".format(powershell, path, command)
     elif exec_type == "custom":
         exec_command = "powershell {} {}".format(path, command)
+    elif exec_type == "python":
+        exec_command = "python {}".format(path)
+    elif exec_type == "command":
+        exec_command = "{} {}".format(command, path)
     else:
         return
 
@@ -130,7 +140,8 @@ def _run_command(path=basestring, command=basestring, exec_type=basestring):
     print "EXECUTION COMMAND", exec_command
     print "-" * 80
 
-    sp.call(['runas', '/savedcred', '/user:darrenpaul', exec_command], shell=True)
+    sp.Popen(exec_command, shell=True)
+    # sp.call(['runas', '/savedcred', '/user:darrenpaul', exec_command], shell=True)
 
     print "---FINISHED INSTALLING---"
 

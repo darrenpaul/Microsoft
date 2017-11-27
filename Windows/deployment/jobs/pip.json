@@ -1,0 +1,16 @@
+{
+  "zipped": false,
+  "type": "python",
+  "command":
+  {
+  },
+ "paths":
+ {
+   "source":
+   {
+      "local": "C:\\deployment\\get-pip.py",
+      "server": "\\\\fileserver01\\resources\\it\\software\\pip\\get-pip.py",
+      "url": ""
+   }
+ }
+}

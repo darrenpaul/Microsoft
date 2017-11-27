@@ -1,0 +1,16 @@
+{
+  "zipped": false,
+  "type": "command",
+  "command":
+  {
+    "pip": "pip install"
+  },
+ "paths":
+ {
+   "source":
+   {
+      "pyside": "pyside",
+      "pyyaml": "pyyaml"
+   }
+ }
+}
