@@ -1,0 +1,22 @@
+{
+  "zipped": false,
+  "type": "exe",
+  "command":
+  {
+    "silent": "/s",
+    "a": "/v",
+    "g": "/i",
+    "c": "/S",
+    "b": "/qn",
+    "f": "/silent",
+    "license": "/EULA=1"
+  },
+ "paths":
+ {
+   "source":
+   {
+      "local": "C:\\deployment\\rv-win64-x86-64-7.2.1.exe",
+      "server": "\\\\fileserver01\\resources\\it\\software\\RV_Installs\\Windows\\rv-win64-x86-64-7.2.1.exe"
+   }
+ }
+}

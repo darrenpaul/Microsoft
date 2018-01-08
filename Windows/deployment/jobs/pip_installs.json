@@ -10,7 +10,8 @@
    "source":
    {
       "pyside": "pyside",
-      "pyyaml": "pyyaml"
+      "pyyaml": "pyyaml",
+      "requests": "requests"
    }
  }
 }

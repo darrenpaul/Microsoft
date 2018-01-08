@@ -53,48 +53,60 @@ def _parse_data(job=basestring):
     data = json.load(open("C:/dev/Microsoft/Windows/deployment/jobs/{}.json".format(job)))
     source = None
 
-    if data["type"] == "command":
-        for path in data["paths"]["source"]:
-            for key, val in  data["command"].iteritems():
-                command = val
-                _run_command(path=path, command=command, exec_type=data["type"])
-    else:
-        if data["paths"]["source"]["local"] is not True:
-            if data["paths"]["source"]["url"]:
-                source = data["paths"]["source"]["url"]
-                import urllib
-                print "DOWNLOADING", job
-                urllib.urlretrieve(source, data["paths"]["source"]["local"])
-        if data["paths"]["source"]["local"]:
-            if "server" in data["paths"]["source"]:
-                server_source = str(data["paths"]["source"]["server"])
-            source = data["paths"]["source"]["local"]
-            if "zipped" in data and data["zipped"]:
-                if data["zipped"]:
-                    source = data["paths"]["source"]["zipped"]
-                    if os.path.exists(source) is False:
-                        shutil.copyfile(server_source, source)
-                    if os.path.exists(data["paths"]["source"]["local"]) is False:
-                        _unzip(source=data["paths"]["source"]["zipped"], target=data["paths"]["source"]["local"])
-            else:
-                if os.path.exists(source) is False:
-                    shutil.copyfile(server_source, source)
+    if data["type"] == "script":
+        _run_powershell_script(path=data["paths"]["source"]["local"])
+    elif data["command"] == "msiexec":
+        pass
+    elif data["command"] == "exe":
+        pass
 
-        if "executable" in data["paths"]["source"]:
-            source = data["paths"]["source"]["executable"]
+    # if data["type"] == "command":
+    #     for path in data["paths"]["source"]:
+    #         for key, val in  data["command"].iteritems():
+    #             command = val
+    #             _run_command(path=path, command=command, exec_type=data["type"])
+    # else:
+    #     if "url" in data["paths"]["source"]:
+    #         if data["paths"]["source"]["url"]:
+    #             source = data["paths"]["source"]["url"]
+    #             import urllib
+    #             print "DOWNLOADING", job
+    #             urllib.urlretrieve(source, data["paths"]["source"]["local"])
+    #
+    #     if data["paths"]["source"]["local"]:
+    #         if "server" in data["paths"]["source"]:
+    #             server_source = str(data["paths"]["source"]["server"])
+    #         source = data["paths"]["source"]["local"]
+    #         if "zipped" in data and data["zipped"]:
+    #             if data["zipped"]:
+    #                 source = data["paths"]["source"]["zipped"]
+    #                 if os.path.exists(source) is False:
+    #                     shutil.copyfile(server_source, source)
+    #                 if os.path.exists(data["paths"]["source"]["local"]) is False:
+    #                     _unzip(source=data["paths"]["source"]["zipped"], target=data["paths"]["source"]["local"])
+    #         else:
+    #             if os.path.exists(source) is False:
+    #                 shutil.copyfile(server_source, source)
+    #
+    #     if "executable" in data["paths"]["source"]:
+    #         source = data["paths"]["source"]["executable"]
+    #
+    #     command = _get_commands(data=data["command"])
+    #     exec_type = data["type"]
+    #
+    #     print "\n"
+    #     print "PREPARING DATA"
+    #     print "-" * 80
+    #     print "SOURCE", source
+    #     print "COMMAND", command
+    #     print "-" * 80
+    #     print "---DATA READY---"
+    #
+    #     _run_command(path=source, command=command, exec_type=exec_type)
 
-        command = _get_commands(data=data["command"])
-        exec_type = data["type"]
-
-        print "\n"
-        print "PREPARING DATA"
-        print "-" * 80
-        print "SOURCE", source
-        print "COMMAND", command
-        print "-" * 80
-        print "---DATA READY---"
-
-        _run_command(path=source, command=command, exec_type=exec_type)
+def _run_powershell_script(path=None):
+    if path:
+        sp.call(['runas', '/savedcred', '/user:darrenpaul', "powershell.exe {}".format(path)], shell=True)
 
 
 def _unzip(source=basestring, target=basestring):
@@ -116,7 +128,6 @@ def _get_commands(data=None):
             command = "{} {}".format(command, val)
 
     return command.strip()
-
 
 def _run_command(path=basestring, command=basestring, exec_type=basestring):
     powershell = "powershell.exe"

@@ -8,7 +8,7 @@
  {
    "source":
    {
-     "local": "c:\\dev\\Microsoft\\Windows\\deployment\\powershell\\remove_windows_bloatware.ps1"
+     "local": "c:\\dev\\Microsoft\\Windows\\deployment\\powershell\\map_network_drive.ps1"
    }
  }
 }
