@@ -2,13 +2,13 @@
   "type": "script",
   "command":
   {
-    "type": "powershell"
+    "type": "bat"
   },
  "paths":
  {
    "source":
    {
-     "local": "c:\\dev\\Microsoft\\Windows\\deployment\\powershell\\map_network_drive.ps1"
+     "local": "C:\\dev\\Microsoft\\Windows\\deployment\\bat\\map_network_drives.bat"
    }
  }
 }

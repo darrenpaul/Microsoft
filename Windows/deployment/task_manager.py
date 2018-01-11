@@ -7,14 +7,14 @@ import argparse
 import os
 import shutil
 import platform
-import subprocess as sp
+import subprocess
 import getpass
 from pprint import pprint
 
 
 def start_parser():
     # Main
-    print sys.argv
+    print "STARTING DEPLOYMENT SCRIPT"
 
     asset = None
 
@@ -50,11 +50,17 @@ def _get_jobs_from_task(task=basestring):
 
 
 def _parse_data(job=basestring):
-    data = json.load(open("C:/dev/Microsoft/Windows/deployment/jobs/{}.json".format(job)))
-    source = None
+    root = os.path.dirname(os.path.abspath(__file__))
+
+    data = json.load(open("{root}/jobs/{job}.json".format(root=root, job=job)))
+
 
     if data["type"] == "script":
-        _run_powershell_script(path=data["paths"]["source"]["local"])
+        _run_script(path=data["paths"]["source"]["local"])
+    if data["type"] == "copypaste":
+        source = data["paths"]["source"]["server"]
+        target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
+        _run_copy_paste(source=source, target=target, run_after=True)
     elif data["command"] == "msiexec":
         pass
     elif data["command"] == "exe":
@@ -104,9 +110,16 @@ def _parse_data(job=basestring):
     #
     #     _run_command(path=source, command=command, exec_type=exec_type)
 
-def _run_powershell_script(path=None):
+def _run_script(path=None):
     if path:
-        sp.call(['runas', '/savedcred', '/user:darrenpaul', "powershell.exe {}".format(path)], shell=True)
+        subprocess.call(["{}".format(path)], shell=True)
+
+
+def _run_copy_paste(source=None, target=None, run_after=False):
+    if os.path.exists(source):
+        shutil.copyfile(src=source, dst=target)
+        if run_after:
+            _run_script(target)
 
 
 def _unzip(source=basestring, target=basestring):
@@ -121,6 +134,7 @@ def _unzip(source=basestring, target=basestring):
     zip.close()
     print "FINISHED UNZIPPING FILE"
 
+
 def _get_commands(data=None):
     command = ""
     if data:
@@ -128,6 +142,7 @@ def _get_commands(data=None):
             command = "{} {}".format(command, val)
 
     return command.strip()
+
 
 def _run_command(path=basestring, command=basestring, exec_type=basestring):
     powershell = "powershell.exe"
