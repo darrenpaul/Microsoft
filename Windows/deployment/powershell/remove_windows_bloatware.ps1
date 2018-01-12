@@ -1,6 +1,5 @@
 Get-AppxPackage *3dbuilder* | Remove-AppxPackage
 Get-AppxPackage *windowsalarms* | Remove-AppxPackage
-Get-AppxPackage *windowscalculator* | Remove-AppxPackage
 Get-AppxPackage *windowscommunicationsapps* | Remove-AppxPackage
 Get-AppxPackage *windowscamera* | Remove-AppxPackage
 Get-AppxPackage *officehub* | Remove-AppxPackage
@@ -23,5 +22,6 @@ Get-AppxPackage *king.com.CandyCrushSodaSaga* | Remove-AppxPackage
 Get-AppxPackage *king.com.BubbleWitch3Saga* | Remove-AppxPackage
 Get-AppxPackage *Microsoft.MinecraftUWP* | Remove-AppxPackage
 Get-AppxPackage *A278AB0D.MarchofEmpires* | Remove-AppxPackage
-Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackage
-Get-AppxPackage *89006A2E.AutodeskSketchBook* | Remove-AppxPackag
+Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackagee
+Get-AppxPackage *89006A2E.AutodeskSketchBook* | Remove-AppxPackage
+Get-AppxPackage *A278AB0D.DisneyMagicKingdoms* | Remove-AppxPackage
