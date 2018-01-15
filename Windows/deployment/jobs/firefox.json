@@ -1,4 +1,6 @@
 {
+  "name": "Firefox",
+  "version": "",
   "type": "exe",
   "command":
   {
@@ -8,7 +10,7 @@
  {
    "source":
    {
-     "local": "C:\\deployment\\firefox.exe",
+     "local": "\\deployment\\firefox.exe",
      "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-ZA"
    }
  }

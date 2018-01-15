@@ -8,6 +8,8 @@ import os
 import shutil
 import platform
 import subprocess
+import urllib
+import time
 import getpass
 from pprint import pprint
 
@@ -54,17 +56,32 @@ def _parse_data(job=basestring):
 
     data = json.load(open("{root}/jobs/{job}.json".format(root=root, job=job)))
 
-
     if data["type"] == "script":
-        _run_script(path=data["paths"]["source"]["local"])
+        _run_script(data=data)
     if data["type"] == "copypaste":
         source = data["paths"]["source"]["server"]
         target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
         _run_copy_paste(source=source, target=target, run_after=True)
-    elif data["command"] == "msiexec":
-        pass
-    elif data["command"] == "exe":
-        pass
+    elif data["type"] == "msiexec":
+        if "server" in data["paths"]["source"]:
+            source = data["paths"]["source"]["server"]
+            target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
+            _run_copy_paste(source=source, target=target, run_after=False)
+        elif "url" in data["paths"]["source"]:
+            _download_from_url(name=data["name"], url=data["paths"]["source"]["url"], destination=data["paths"]["source"]["local"])
+
+        _run_exe(data=data)
+    elif data["type"] == "exe":
+        if "server" in data["paths"]["source"]:
+            source = data["paths"]["source"]["server"]
+            target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
+            _run_copy_paste(source=source, target=target, run_after=False)
+        elif "url" in data["paths"]["source"]:
+            _download_from_url(name=data["name"], url=data["paths"]["source"]["url"], destination=data["paths"]["source"]["local"])
+
+        _run_exe(data=data)
+
+
 
     # if data["type"] == "command":
     #     for path in data["paths"]["source"]:
@@ -110,16 +127,53 @@ def _parse_data(job=basestring):
     #
     #     _run_command(path=source, command=command, exec_type=exec_type)
 
-def _run_script(path=None):
-    if path:
-        subprocess.call(["{}".format(path)], shell=True)
+
+def _download_from_url(name=None, url=None, destination=None):
+    destination = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=destination)
+    if os.path.exists(destination) is False:
+        print "DOWNLOADING {}".format(name)
+        _ensure_directory_exists(destination)
+        urllib.urlretrieve(url, destination)
+
+def _run_script(data=None):
+    if data:
+        path = data["paths"]["source"]["local"]
+        active_process = subprocess.Popen(path, shell=True)
+        active_process.wait()
+
+
+def _run_exe(data=None):
+    print "INSTALLING {} {}".format(data["name"], data["version"])
+    if data:
+        path = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
+
+        command = None
+
+        for key, val in data["command"].iteritems():
+            if command is None:
+                command = "{}".format(val)
+            else:
+                command = "{} {}".format(command, val)
+
+        exec_command = "powershell.exe Start-Process -FilePath {path} -ArgumentList '{arguments}'".format(path=path, arguments=command)
+
+        active_process = subprocess.Popen(exec_command)
+        active_process.wait()
 
 
 def _run_copy_paste(source=None, target=None, run_after=False):
+    print "COPYING {} TO {}".format(source, target)
     if os.path.exists(source):
-        shutil.copyfile(src=source, dst=target)
-        if run_after:
-            _run_script(target)
+        if os.path.exists(target) is False:
+            _ensure_directory_exists(target)
+            shutil.copyfile(src=source, dst=target)
+            if run_after:
+                _run_script(target)
+
+
+def _ensure_directory_exists(path=None):
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
 
 
 def _unzip(source=basestring, target=basestring):

@@ -1,0 +1,17 @@
+{
+  "name": "Zbrush",
+  "version": "4R-P2",
+  "type": "exe",
+  "command":
+  {
+    "silent": "--mode unattended"
+  },
+ "paths":
+ {
+   "source":
+   {
+     "local": "\\deployment\\ZBrush_4R8_P2_Installer_WIN.exe",
+     "server": "\\\\fileserver01\\resources\\it\\software\\zbrush\\ZBrush_4R8_P2_Installer_WIN.exe"
+   }
+ }
+}

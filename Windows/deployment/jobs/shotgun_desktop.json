@@ -8,7 +8,7 @@
  {
    "source":
    {
-     "local": "C:\\deployment\\shotgun_desktop.exe",
+     "local": "\\deployment\\shotgun_desktop.exe",
      "url": "https://sg-shotgunsoftware.s3.amazonaws.com/deploy/desktop/ShotgunInstaller_Current.exe"
    }
  }
