@@ -41,12 +41,13 @@ $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - "SETTING UP ENVIRONMENT VARIABLES"
 Write-Host '--------------------------------'
-[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "User")
-[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "User")
+[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "Machine")
+[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "Machine")
 $end_time = Get-Date
 $current_time = $end_time
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - "PYTHON 2.7 INSTALLATION COMPLETED"
 Write-Output "Time taken: $(($end_time).Subtract($start_time).Seconds) second(s)"
 Write-Host '--------------------------------'
-Read-Host -Prompt ""
+Read-Host -Prompt "Press Enter to exit"
+-noexit
