@@ -1,12 +1,11 @@
 $script_root = $PSScriptRoot
-$config = $script_root + "\config\install_python.txt"
 
 $local_resources = 'C:\deployment'
 
 $install_directory = "C:\Python27\python.exe"
-$url = "https://www.python.org/ftp/python/2.7.14/python-2.7.14.msi"
-$output = "C:\deployment\python-2.7.14.msi"
-$command = "/qb! /i $output"
+$url = "https://www.python.org/ftp/python/3.6.4/python-3.6.4-amd64.exe"
+$output = "C:\deployment\python-3.6.4.exe"
+$command = "/passive"
 
 $start_time = Get-Date
 $current_time = $start_time
@@ -23,7 +22,7 @@ Write-Host '--------------------------------'
 
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING PYTHON 2.7'
+Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING PYTHON 3.6.4'
 Write-Host '--------------------------------'
 $wc = New-Object System.Net.WebClient
 $wc.DownloadFile($url, $output)
@@ -31,23 +30,11 @@ $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'DOWNLOAD FINISHED'
 Write-Host '--------------------------------'
-
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'INSTALLING PYTHON 2.7'
+Write-Host $current_time.ToShortTimeString() - 'INSTALLING PYTHON 3.6.4'
 Write-Host '--------------------------------'
-Start-Process -FilePath msiexec -ArgumentList $command -Wait
+Start-Process -FilePath $output /passive
 $current_time = Get-Date
-Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - "SETTING UP ENVIRONMENT VARIABLES"
-Write-Host '--------------------------------'
-[Environment]::SetEnvironmentVariable("PYTHON_HOME", "c:\Python27", "Machine")
-[Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\", "Machine")
-$end_time = Get-Date
-$current_time = $end_time
-Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - "PYTHON 2.7 INSTALLATION COMPLETED"
-Write-Output "Time taken: $(($end_time).Subtract($start_time).Seconds) second(s)"
-Write-Host '--------------------------------'
 Read-Host -Prompt "Press Enter to exit"
 -noexit

@@ -27,7 +27,7 @@ def start_parser():
 
     current_task = args.task
 
-    tasks_directory = "C:\\dev\\Microsoft\\Windows\\deployment\\tasks"
+    tasks_directory = "C:\\dev\\Microsoft\\deployment\\tasks"
 
     tasks = os.listdir(tasks_directory)
 
@@ -57,7 +57,10 @@ def _parse_data(job=basestring):
     data = json.load(open("{root}/jobs/{job}.json".format(root=root, job=job)))
 
     if data["type"] == "script":
-        _run_script(data=data)
+        if "url" in data["paths"]["source"]:
+            _download_from_url(name=data["name"], url=data["paths"]["source"]["url"], destination=data["paths"]["source"]["local"])
+        target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
+        _run_script(path=target)
     if data["type"] == "copypaste":
         source = data["paths"]["source"]["server"]
         target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
@@ -135,9 +138,9 @@ def _download_from_url(name=None, url=None, destination=None):
         _ensure_directory_exists(destination)
         urllib.urlretrieve(url, destination)
 
-def _run_script(data=None):
-    if data:
-        path = data["paths"]["source"]["local"]
+
+def _run_script(path=None):
+    if path:
         active_process = subprocess.Popen(path, shell=True)
         active_process.wait()
 
