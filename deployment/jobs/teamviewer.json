@@ -1,0 +1,16 @@
+{
+  "name": "Teamviewer",
+  "version": "",
+  "type": "script",
+  "command":
+  {
+  },
+ "paths":
+ {
+   "source":
+   {
+     "local": "\\deployment\\teamviewer.ps1",
+     "server": "C:\\dev\\Microsoft\\deployment\\powershell\\teamviewer.ps1"
+   }
+ }
+}

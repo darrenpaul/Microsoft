@@ -1,17 +1,16 @@
 {
   "name": "Firefox",
   "version": "",
-  "type": "exe",
+  "type": "script",
   "command":
   {
-    "silent": "/S"
   },
  "paths":
  {
    "source":
    {
-     "local": "\\deployment\\firefox.exe",
-     "url": "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-ZA"
+     "local": "\\deployment\\firefox.ps1",
+     "server": "C:\\dev\\Microsoft\\deployment\\powershell\\firefox.ps1"
    }
  }
 }

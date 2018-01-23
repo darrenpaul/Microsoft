@@ -59,6 +59,10 @@ def _parse_data(job=basestring):
     if data["type"] == "script":
         if "url" in data["paths"]["source"]:
             _download_from_url(name=data["name"], url=data["paths"]["source"]["url"], destination=data["paths"]["source"]["local"])
+        elif "server" in data["paths"]["source"]:
+            source = data["paths"]["source"]["server"]
+            target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
+            _run_copy_paste(source=source, target=target, run_after=False)
         target = "{a}{b}".format(a=os.getenv('USERPROFILE'), b=data["paths"]["source"]["local"])
         _run_script(path=target)
     if data["type"] == "copypaste":
@@ -141,7 +145,7 @@ def _download_from_url(name=None, url=None, destination=None):
 
 def _run_script(path=None):
     if path:
-        active_process = subprocess.Popen(path, shell=True)
+        active_process = subprocess.Popen("powershell " + path, shell=True)
         active_process.wait()
 
 

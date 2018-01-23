@@ -2,9 +2,8 @@ $script_root = $PSScriptRoot
 
 $local_resources = 'C:\deployment'
 
-$install_directory = "C:\Python27\python.exe"
-$url = "https://www.python.org/ftp/python/3.6.4/python-3.6.4-amd64.exe"
-$output = "C:\deployment\python-3.6.4.exe"
+$url = "https://stubdownloader.cdn.mozilla.net/builds/firefox-stub/en-US/win/49f9b04253dfa9ab7d83a2cf09ac39e92e678be4c83b40354a9df4187322b58e/Firefox%20Installer.exe"
+$output = "C:\deployment\firefox.exe"
 $command = "/passive"
 
 $start_time = Get-Date
@@ -22,7 +21,7 @@ Write-Host '--------------------------------'
 
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING PYTHON 3.6.4'
+Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING FIREFOX'
 Write-Host '--------------------------------'
 $wc = New-Object System.Net.WebClient
 $wc.DownloadFile($url, $output)
@@ -32,9 +31,7 @@ Write-Host $current_time.ToShortTimeString() - 'DOWNLOAD FINISHED'
 Write-Host '--------------------------------'
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'INSTALLING PYTHON 3.6.4'
+Write-Host $current_time.ToShortTimeString() - 'INSTALLING FIREFOX'
 Write-Host '--------------------------------'
-Start-Process -FilePath $output $command
+Start-Process -FilePath $output /passive
 $current_time = Get-Date
-Read-Host -Prompt "Press Enter to exit"
--noexit

@@ -1,15 +1,16 @@
 {
-  "type": "exe",
+  "name": "Shotgun",
+  "version": "",
+  "type": "script",
   "command":
   {
-    "silent": "/S"
   },
  "paths":
  {
    "source":
    {
-     "local": "\\deployment\\shotgun_desktop.exe",
-     "url": "https://sg-shotgunsoftware.s3.amazonaws.com/deploy/desktop/ShotgunInstaller_Current.exe"
+     "local": "\\deployment\\shotgun_desktop.ps1",
+     "server": "C:\\dev\\Microsoft\\deployment\\powershell\\shotgun_desktop.ps1"
    }
  }
 }

@@ -1,9 +1,0 @@
-pyside
-pyyaml
-gspread
-oauth2client
-pyopenssl
-httplib
-urllib
-urllib3
-google-api-python-client
