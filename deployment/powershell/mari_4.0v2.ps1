@@ -2,10 +2,11 @@ $script_root = $PSScriptRoot
 
 $local_resources = 'C:\deployment'
 
-$software = "PIP"
+$software = "MARI 4.0v2"
 
-$url = "https://bootstrap.pypa.io/get-pip.py"
-$output = "C:\deployment\get-pip.py"
+$source = "\\fileserver01\resources\it\software\foundry\mari\Mari4.0v2-win-x86-release-64.zip"
+$unzip = "C:\deployment\mari"
+$destination = "C:\deployment\mari\Mari4.0v2-win-x86-release-64.exe"
 
 $start_time = Get-Date
 $current_time = $start_time
@@ -19,24 +20,26 @@ $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'DONE MAKING DIRECTORY'
 Write-Host '--------------------------------'
-$current_time = Get-Date
 
-Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING', $software
-Write-Host '--------------------------------'
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Invoke-WebRequest -Uri $url -OutFile $output
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'DOWNLOAD FINISHED'
+Write-Host $current_time.ToShortTimeString() - 'UNZIPPING', $software
 Write-Host '--------------------------------'
-$current_time = Get-Date
+if(!(Test-Path $destination)){
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($source, $unzip)
+}
 
+$current_time = Get-Date
+Write-Host '--------------------------------'
+Write-Host $current_time.ToShortTimeString() - 'COPY FINISHED'
+Write-Host '--------------------------------'
+$current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'INSTALLING', $software
 Write-Host '--------------------------------'
-Start-Process -FilePath python $output -Wait
+Start-Process -FilePath $destination /Silent -Wait
 $current_time = Get-Date
-Write-Host $current_time.ToShortTimeString() - "PIP INSTALLATION COMPLETED"
-Write-Output "Time taken: $(($end_time).Subtract($start_time).Seconds) second(s)"
-Write-Host '--------------------------------'
+
+//Read-Host -Prompt "Press Enter to exit"
+//-noexit

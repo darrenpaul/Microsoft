@@ -24,7 +24,7 @@ $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'COPYING MAYA UPDATE 5'
 Write-Host '--------------------------------'
-if(!(Test-Path $local_resources)){
+if(!(Test-Path $destination)){
     copy-item -path $source -destination $destination
 }
 $current_time = Get-Date
