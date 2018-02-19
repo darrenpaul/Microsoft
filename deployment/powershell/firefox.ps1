@@ -1,5 +1,7 @@
 $script_root = $PSScriptRoot
 
+$software = "FIREFOX"
+
 $local_resources = 'C:\deployment'
 
 $url = "https://stubdownloader.cdn.mozilla.net/builds/firefox-stub/en-US/win/49f9b04253dfa9ab7d83a2cf09ac39e92e678be4c83b40354a9df4187322b58e/Firefox%20Installer.exe"
@@ -21,17 +23,19 @@ Write-Host '--------------------------------'
 
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING FIREFOX'
+Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING', $software
 Write-Host '--------------------------------'
-$wc = New-Object System.Net.WebClient
-$wc.DownloadFile($url, $output)
-$current_time = Get-Date
+if(!(Test-Path $output)){
+    $wc = New-Object System.Net.WebClient
+    $wc.DownloadFile($url, $output)
+    $current_time = Get-Date
+}
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'DOWNLOAD FINISHED'
 Write-Host '--------------------------------'
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'INSTALLING FIREFOX'
+Write-Host $current_time.ToShortTimeString() - 'INSTALLING', $software
 Write-Host '--------------------------------'
-Start-Process -FilePath $output /passive
+Start-Process -FilePath $output /passive -Wait
 $current_time = Get-Date

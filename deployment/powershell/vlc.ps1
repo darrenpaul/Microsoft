@@ -1,12 +1,12 @@
 $script_root = $PSScriptRoot
 
+$software = "VLC 3.0.0"
+
 $local_resources = 'C:\deployment'
 
-$software = "MARI 4.0v2"
-
-$source = "\\fileserver01\resources\it\software\foundry\mari\Mari4.0v2-win-x86-release-64.zip"
-$unzip = "C:\deployment\mari"
-$destination = "C:\deployment\mari\Mari4.0v2-win-x86-release-64.exe"
+$url = "http://videolan.mirror.liquidtelecom.com/vlc/3.0.0/win32/vlc-3.0.0-win32.exe"
+$output = "C:\deployment\firefox.exe"
+$command = "/passive"
 
 $start_time = Get-Date
 $current_time = $start_time
@@ -23,20 +23,19 @@ Write-Host '--------------------------------'
 
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'UNZIPPING', $software
+Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING', $software
 Write-Host '--------------------------------'
-if(!(Test-Path $destination)){
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($source, $unzip)
+if(!(Test-Path $output)){
+    $wc = New-Object System.Net.WebClient
+    $wc.DownloadFile($url, $output)
+    $current_time = Get-Date
 }
-
-$current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'COPY FINISHED'
+Write-Host $current_time.ToShortTimeString() - 'DOWNLOAD FINISHED'
 Write-Host '--------------------------------'
 $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'INSTALLING', $software
 Write-Host '--------------------------------'
-Start-Process -FilePath $destination /Silent -Wait
+Start-Process -FilePath $output /S -Wait
 $current_time = Get-Date
