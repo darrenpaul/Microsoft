@@ -1,6 +1,10 @@
 @echo off
 @echo DON'T CLOSE THIS WINDOW
 
+@echo mounting Royal Render to R:
+net use r: \\10.0.0.251\royal /p:yes
+
+
 @echo mounting Personal to P:
 net use p: \\10.0.0.251\personal /p:yes
 
