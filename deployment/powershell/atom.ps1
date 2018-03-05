@@ -37,5 +37,5 @@ $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'INSTALLING', $software
 Write-Host '--------------------------------'
-Start-Process -FilePath $output /Silent -Wait
+Start-Process -FilePath $output /Silent
 $current_time = Get-Date
