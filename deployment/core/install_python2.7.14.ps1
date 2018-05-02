@@ -4,7 +4,7 @@ $config = $script_root + "\config\install_python2.7.14.txt"
 $local_resources = 'C:\deployment'
 
 $install_directory = "C:\Python27\python.exe"
-$url = "https://www.python.org/ftp/python/2.7.14/python-2.7.14.msi"
+$url = "https://www.python.org/ftp/python/2.7.15/python-2.7.15.amd64.msi"
 $output = "C:\deployment\python-2.7.14.msi"
 $command = "/qb! /i $output"
 
