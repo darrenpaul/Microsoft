@@ -3,9 +3,11 @@ $config = $script_root + "\config\install_python2.7.14.txt"
 
 $local_resources = 'C:\deployment'
 
+$software = "PYTHON 2.7.15"
+
 $install_directory = "C:\Python27\python.exe"
 $url = "https://www.python.org/ftp/python/2.7.15/python-2.7.15.amd64.msi"
-$output = "C:\deployment\python-2.7.14.msi"
+$output = "C:\deployment\python-2.7.15.amd64.msi"
 $command = "/qb! /i $output"
 
 $start_time = Get-Date
@@ -23,17 +25,19 @@ Write-Host '--------------------------------'
 
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING PYTHON 2.7.14'
+Write-Host $current_time.ToShortTimeString() - 'DOWNLOADING ', $software
 Write-Host '--------------------------------'
-$wc = New-Object System.Net.WebClient
-$wc.DownloadFile($url, $output)
-$current_time = Get-Date
+if(!(Test-Path $output)){
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $output
+    $current_time = Get-Date
+}
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'DOWNLOAD FINISHED'
 Write-Host '--------------------------------'
 $current_time = Get-Date
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - 'INSTALLING PYTHON 2.7.14'
+Write-Host $current_time.ToShortTimeString() - 'INSTALLING ', $software
 Write-Host '--------------------------------'
 Start-Process -FilePath msiexec -ArgumentList $command -Wait
 $current_time = Get-Date
@@ -45,7 +49,7 @@ Write-Host '--------------------------------'
 $end_time = Get-Date
 $current_time = $end_time
 Write-Host '--------------------------------'
-Write-Host $current_time.ToShortTimeString() - "PYTHON 2.7.14 INSTALLATION COMPLETED"
+Write-Host $current_time.ToShortTimeString() - $software, " INSTALLATION COMPLETED"
 Write-Output "Time taken: $(($end_time).Subtract($start_time).Seconds) second(s)"
 Write-Host '--------------------------------'
 Read-Host -Prompt "Press Enter to exit"
