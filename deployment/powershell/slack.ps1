@@ -1,11 +1,11 @@
 $script_root = $PSScriptRoot
 
-$software = "GIT"
+$software = "SLACK"
 
 $local_resources = 'C:\deployment'
 
-$url = "https://github-production-release-asset-2e65be.s3.amazonaws.com/23216272/54765672-374b-11e8-95c2-b0759fe7c908?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180511%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180511T093841Z&X-Amz-Expires=300&X-Amz-Signature=a044d9c7793b8774d406918b5144b69446ac2bab3ed4538f05347e4a3be0bd46&X-Amz-SignedHeaders=host&actor_id=27204436&response-content-disposition=attachment%3B%20filename%3DGit-2.17.0-64-bit.exe&response-content-type=application%2Foctet-stream"
-$output = "C:\deployment\git.exe"
+$url = "https://downloads.slack-edge.com/releases_x64/SlackSetup.exe"
+$output = "C:\deployment\slack.exe"
 
 $start_time = Get-Date
 $current_time = $start_time
@@ -36,5 +36,5 @@ $current_time = Get-Date
 Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - 'INSTALLING', $software
 Write-Host '--------------------------------'
-Start-Process -FilePath $output /Silent -Wait
+Start-Process -FilePath $output /S
 $current_time = Get-Date

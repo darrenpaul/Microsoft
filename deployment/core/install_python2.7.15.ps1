@@ -1,5 +1,5 @@
 $script_root = $PSScriptRoot
-$config = $script_root + "\config\install_python2.7.14.txt"
+$config = $script_root + "\config\install_python2.7.15.txt"
 
 $local_resources = 'C:\deployment'
 
@@ -52,5 +52,3 @@ Write-Host '--------------------------------'
 Write-Host $current_time.ToShortTimeString() - $software, " INSTALLATION COMPLETED"
 Write-Output "Time taken: $(($end_time).Subtract($start_time).Seconds) second(s)"
 Write-Host '--------------------------------'
-Read-Host -Prompt "Press Enter to exit"
--noexit
