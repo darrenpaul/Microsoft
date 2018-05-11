@@ -3,5 +3,5 @@
 ################################################################################
 
 /Windows/client_secret.json
-.vscode/settings.json
+.vscode/*
 .idea/workspace.xml
